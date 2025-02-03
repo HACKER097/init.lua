@@ -1,3 +1,4 @@
+
 --[[
 
 =====================================================================
@@ -319,9 +320,6 @@ require('lazy').setup({
         { '<leader>d', group = '[D]ocument' },
         { '<leader>r', group = '[R]ename' },
         { '<leader>s', group = '[S]earch' },
-        { '<leader>w', group = '[W]orkspace' },
-        { '<leader>t', group = '[T]oggle' },
-        { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
       },
     },
   },
@@ -437,6 +435,83 @@ require('lazy').setup({
       end, { desc = '[S]earch [N]eovim files' })
     end,
   },
+
+  {
+    'smoka7/hop.nvim',
+    version = "*",
+    opts = {
+      keys = 'etovxqpdygfblzhckisuran'
+    }
+  },
+
+  {
+    "kawre/leetcode.nvim",
+    build = ":TSUpdate html", -- if you have `nvim-treesitter` installed
+    dependencies = {
+      "nvim-telescope/telescope.nvim",
+      -- "ibhagwan/fzf-lua",
+      "nvim-lua/plenary.nvim",
+      "MunifTanjim/nui.nvim",
+    },
+    opts = {
+      -- configuration goes here
+    },
+  },
+
+  {
+    "nvzone/typr",
+    cmd = "TyprStats",
+    dependencies = "nvzone/volt",
+    opts = {},
+  },
+
+  {
+    "OXY2DEV/markview.nvim",
+    lazy = false,      -- Recommended
+    -- ft = "markdown" -- If you decide to lazy-load anyway
+
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter",
+      "nvim-tree/nvim-web-devicons"
+    }
+  },
+
+
+  {
+    "3rd/image.nvim",
+    opts = {}
+  },
+
+  -- {
+  --   "tris203/precognition.nvim",
+  --   --event = "VeryLazy",
+  --   opts = {
+  --     -- startVisible = true,
+  --     -- showBlankVirtLine = true,
+  --     -- highlightColor = { link = "Comment" },
+  --     -- hints = {
+  --     --      Caret = { text = "^", prio = 2 },
+  --     --      Dollar = { text = "$", prio = 1 },
+  --     --      MatchingPair = { text = "%", prio = 5 },
+  --     --      Zero = { text = "0", prio = 1 },
+  --     --      w = { text = "w", prio = 10 },
+  --     --      b = { text = "b", prio = 9 },
+  --     --      e = { text = "e", prio = 8 },
+  --     --      W = { text = "W", prio = 7 },
+  --     --      B = { text = "B", prio = 6 },
+  --     --      E = { text = "E", prio = 5 },
+  --     -- },
+  --     -- gutterHints = {
+  --     --     G = { text = "G", prio = 10 },
+  --     --     gg = { text = "gg", prio = 9 },
+  --     --     PrevParagraph = { text = "{", prio = 8 },
+  --     --     NextParagraph = { text = "}", prio = 8 },
+  --     -- },
+  --     -- disabled_fts = {
+  --     --     "startify",
+  --     -- },
+  --   },
+  -- },
 
   -- -- LSP Plugins
   -- {
@@ -904,7 +979,7 @@ require('lazy').setup({
         },
         formatting = {
           format = function(_, vim_item)
-            vim_item.kind = (icons[vim_item.kind] or '') .. ' ' .. vim_item.kind
+            vim_item.kind = (icons[vim_item.kind or ''] or '') .. ' ' .. (vim_item.kind or 'Unknown')
             return vim_item
           end,
         },
@@ -986,7 +1061,6 @@ require('lazy').setup({
   {
     "oxfist/night-owl.nvim",
     lazy = false, -- make sure we load this during startup if it is your main colorscheme
-    priority = 1000, -- make sure to load this before all the other start plugins
     config = function()
       -- load the colorscheme here
       require("night-owl").setup()
@@ -994,12 +1068,12 @@ require('lazy').setup({
     end,
   },
 
-{ "diegoulloao/neofusion.nvim", priority = 1000 , config = true},
+{ "diegoulloao/neofusion.nvim", priority = 100000 , config = true},
 
   {
     'maxmx03/fluoromachine.nvim',
     lazy = false,
-    priority = 1000,
+    priority = 100000,
     config = function ()
       local fm = require 'fluoromachine'
 
@@ -1015,7 +1089,6 @@ require('lazy').setup({
 
   {
     "tiagovla/tokyodark.nvim",
-    priority = 100000,
     opts = {
       -- custom options here
     },
@@ -1147,6 +1220,14 @@ require('lazy').setup({
 vim.keymap.set("n", "<leader>o", '<C-w>w', {desc="[O]ther pane"})
 vim.keymap.set("n", "<leader>O", '<C-^>', {desc="[O]ther buffer"})
 
+vim.keymap.set("n", "<leader>h", ':HopWord<CR>', {desc="[H]op word"})
+vim.keymap.set("n", "<leader>u", ':HopChar1<CR>', {desc="J[u]np"})
+vim.keymap.set("n", "<leader>l", ':HopLineStart<CR>', {desc="Hop [L]ine"})
+
+vim.keymap.set("v", "<leader>h", ':HopWord<CR>', {desc="[H]op word"})
+vim.keymap.set("v", "<leader>u", ':HopChar1<CR>', {desc="J[u]np"})
+vim.keymap.set("v", "<leader>l", ':HopLineStart<CR>', {desc="Hop [L]ine"})
+
 vim.keymap.set("n", "<C-u>", '<C-u>zz')
 vim.keymap.set("n", "<C-d>", '<C-d>zz')
 
@@ -1159,7 +1240,20 @@ vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 
 vim.keymap.set('v', '<leader>d', '"_d', { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>d', '"_d', { noremap = true, silent = true })
--- Telescope
 
-vim.keymap.set('n', '<leader>w', ':w<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>w', ':w<CR>', { noremap = true, silent = true, desc="[W]rite file" })
 vim.keymap.set('n', '<leader>t', ':Oil<CR>', { noremap = true, silent = true })
+
+vim.cmd.colorscheme 'fluoromachine'
+
+vim.o.guifont = "JetBrainsMono Nerd Font:h11" 
+
+vim.opt.tabstop = 4
+vim.opt.softtabstop = 4
+vim.opt.shiftwidth = 4
+vim.opt.expandtab = true
+
+vim.opt.undofile = true
+vim.o.undodir = vim.fn.expand('~/tmp/nvim/undo')
+vim.o.undolevels = 1000
+vim.o.undoreload = 10000
